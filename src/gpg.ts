@@ -24,9 +24,9 @@ export async function refreshKeys() {
   const pool = [
     "keyserver.ubuntu.com",
     "hkp://keyserver.ubuntu.com",
-    "pgp.mit.edu",
-    "hkp://pool.sks-keyservers.net",
-    "ha.pool.sks-keyservers.net",
+    // "pgp.mit.edu",
+    // "hkp://pool.sks-keyservers.net",
+    // "ha.pool.sks-keyservers.net",
   ];
 
   for (const server of pool) {
