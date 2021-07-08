@@ -2,6 +2,11 @@ import { exec } from "@actions/exec";
 import * as core from "@actions/core";
 import * as toolCache from "@actions/tool-cache";
 
+function gpgCommand() {
+  const gpgArgs = core.getInput("gpg-args", {});
+  return `gpg ${gpgArgs}`;
+}
+
 export async function setupKeys() {
   core.debug("Fetching verification keys");
   let path = await toolCache.downloadTool(
@@ -9,7 +14,7 @@ export async function setupKeys() {
   );
 
   core.debug("Importing verification keys");
-  await exec(`gpg --import "${path}"`);
+  await exec(`${gpgCommand()} --import "${path}"`);
 
   core.debug("Refreshing keys");
   await refreshKeys();
@@ -17,7 +22,7 @@ export async function setupKeys() {
 
 export async function verify(signaturePath: string, packagePath: string) {
   core.debug("Verifying signature");
-  await exec("gpg", ["--verify", signaturePath, packagePath]);
+  await exec(`${gpgCommand()}`, ["--verify", signaturePath, packagePath]);
 }
 
 export async function refreshKeys() {
@@ -42,7 +47,7 @@ export async function refreshKeys() {
 }
 
 function refreshKeysFromServer(server: string): Promise<boolean> {
-  return exec(`gpg --keyserver ${server} --refresh-keys Swift`)
+  return exec(`${gpgCommand()} --keyserver ${server} --refresh-keys Swift`)
     .then((code) => code === 0)
     .catch((error) => {
       core.warning(

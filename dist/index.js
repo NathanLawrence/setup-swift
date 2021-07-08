@@ -8671,12 +8671,16 @@ exports.refreshKeys = exports.verify = exports.setupKeys = void 0;
 const exec_1 = __webpack_require__(986);
 const core = __importStar(__webpack_require__(470));
 const toolCache = __importStar(__webpack_require__(533));
+function gpgCommand() {
+    const gpgArgs = core.getInput("gpg-args", {});
+    return `gpg ${gpgArgs}`;
+}
 function setupKeys() {
     return __awaiter(this, void 0, void 0, function* () {
         core.debug("Fetching verification keys");
         let path = yield toolCache.downloadTool("https://swift.org/keys/all-keys.asc");
         core.debug("Importing verification keys");
-        yield exec_1.exec(`gpg --import "${path}"`);
+        yield exec_1.exec(`${gpgCommand()} --import "${path}"`);
         core.debug("Refreshing keys");
         yield refreshKeys();
     });
@@ -8685,7 +8689,7 @@ exports.setupKeys = setupKeys;
 function verify(signaturePath, packagePath) {
     return __awaiter(this, void 0, void 0, function* () {
         core.debug("Verifying signature");
-        yield exec_1.exec("gpg", ["--verify", signaturePath, packagePath]);
+        yield exec_1.exec(`${gpgCommand()}`, ["--verify", signaturePath, packagePath]);
     });
 }
 exports.verify = verify;
@@ -8711,7 +8715,7 @@ function refreshKeys() {
 }
 exports.refreshKeys = refreshKeys;
 function refreshKeysFromServer(server) {
-    return exec_1.exec(`gpg --keyserver ${server} --refresh-keys Swift`)
+    return exec_1.exec(`${gpgCommand()} --keyserver ${server} --refresh-keys Swift`)
         .then((code) => code === 0)
         .catch((error) => {
         core.warning(`An error occurred when trying to refresh keys from ${server}: ${error}`);
