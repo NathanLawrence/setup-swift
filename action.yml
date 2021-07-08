@@ -6,6 +6,10 @@ inputs:
     description: Swift version to configure
     required: true
     default: '5.4'
+  gpg-args: 
+    description: additional gpg args
+    required: false
+    default: ''
 outputs:
   version:
     description: The full Swift version that was configured
