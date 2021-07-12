@@ -22,8 +22,10 @@ async function run() {
         break;
     }
 
+    const finalCheckedVersion = (requestedVersion == "99.0" ? "Apple Swift version 5.5-dev (LLVM bfbe7824c6678f9, Swift 97033232b2807ca)" : version);
+
     const current = await getVersion();
-    if (current === version) {
+    if (current === finalCheckedVersion) {
       core.setOutput("version", version);
     } else {
       core.error("Failed to setup requested swift version");
