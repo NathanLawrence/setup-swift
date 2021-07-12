@@ -3,6 +3,7 @@ import * as core from "@actions/core";
 import { System, OS } from "./os";
 
 const VERSIONS_LIST: [string, OS[]][] = [
+  ["99.0", [OS.MacOS]],
   ["5.4", [OS.MacOS, OS.Ubuntu]],
   ["5.3.3", [OS.MacOS, OS.Ubuntu]],
   ["5.3.2", [OS.MacOS, OS.Ubuntu]],
@@ -65,6 +66,14 @@ export function swiftPackage(version: string, system: System): Package {
   let platform: string;
   let archiveFile: string;
   let archiveName: string;
+
+  if (version == "99.0") {
+    return {
+      url:
+        "https://swift.org/builds/swift-5.5-branch/xcode/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a-osx.pkg",
+      name: "swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a-osx",
+    };
+  }
 
   switch (system.os) {
     case OS.MacOS:

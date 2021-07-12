@@ -7763,7 +7763,7 @@ const swift_versions_1 = __webpack_require__(336);
 const get_version_1 = __webpack_require__(778);
 function install(version, system) {
     return __awaiter(this, void 0, void 0, function* () {
-        const toolchainName = `swift ${version}`;
+        const toolchainName = chainName(version);
         const toolchain = yield toolchainVersion(toolchainName);
         if (toolchain !== version) {
             let swiftPath = toolCache.find("swift-macOS", version);
@@ -7786,6 +7786,12 @@ function install(version, system) {
     });
 }
 exports.install = install;
+function chainName(version) {
+    if (version == "99.0") {
+        return `Swift Development Snapshot`;
+    }
+    return `swift ${version}`;
+}
 function toolchainVersion(requestedVersion) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield get_version_1.getVersion("xcrun", [
@@ -7848,6 +7854,7 @@ const semver = __importStar(__webpack_require__(876));
 const core = __importStar(__webpack_require__(470));
 const os_1 = __webpack_require__(316);
 const VERSIONS_LIST = [
+    ["99.0", [os_1.OS.MacOS]],
     ["5.4", [os_1.OS.MacOS, os_1.OS.Ubuntu]],
     ["5.3.3", [os_1.OS.MacOS, os_1.OS.Ubuntu]],
     ["5.3.2", [os_1.OS.MacOS, os_1.OS.Ubuntu]],
@@ -7900,6 +7907,12 @@ function swiftPackage(version, system) {
     let platform;
     let archiveFile;
     let archiveName;
+    if (version == "99.0") {
+        return {
+            url: "https://swift.org/builds/swift-5.5-branch/xcode/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a-osx.pkg",
+            name: "swift-5.5-DEVELOPMENT-SNAPSHOT-2021-07-08-a-osx",
+        };
+    }
     switch (system.os) {
         case os_1.OS.MacOS:
             platform = "xcode";

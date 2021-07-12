@@ -8,7 +8,7 @@ import { swiftPackage, Package } from "./swift-versions";
 import { getVersion } from "./get-version";
 
 export async function install(version: string, system: System) {
-  const toolchainName = `swift ${version}`;
+  const toolchainName = chainName(version);
   const toolchain = await toolchainVersion(toolchainName);
 
   if (toolchain !== version) {
@@ -35,6 +35,14 @@ export async function install(version: string, system: System) {
   }
 
   core.exportVariable("TOOLCHAINS", toolchainName);
+}
+
+function chainName(version: string) {
+  if (version == "99.0") {
+    return `Swift Development Snapshot`;
+  }
+
+  return `swift ${version}`;
 }
 
 async function toolchainVersion(requestedVersion: string) {
